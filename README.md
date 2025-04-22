@@ -1,5 +1,5 @@
 # KinPustan
-De lo tradicional a lo digital, sin perder el alma.
+ _De lo tradicional a lo digital, sin perder el alma._
 
 KinPustan es una aplicación pensada para modernizar la gestión de negocios pequeños y medianos, llevando la eficiencia digital a un entorno tradicional sin perder la esencia que hace únicos a los comercios locales.
 
