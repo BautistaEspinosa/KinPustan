@@ -34,7 +34,7 @@ Clona el repositorio:
 bash
 Copiar
 Editar
-git clone https://github.com/TuUsuario/KinPustan.git
+[git clone https://github.com/TuUsuario/KinPustan.git](https://github.com/BautistaEspinosa/KinPustan.git)
 Configura el entorno de desarrollo:
 
 Asegúrate de tener Java 17 y Node.js instalados.
