@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public interface ProductoApiDoc {
@@ -41,7 +42,7 @@ public interface ProductoApiDoc {
           content = @Content(mediaType = "application/json", schema = @Schema(implementation = Producto.class))
       )
   )
-  ResponseEntity<Producto> create(Producto producto);
+  ResponseEntity<Producto> create(@RequestBody Producto producto);
 
   @Operation(
       summary = "Actualiza parcialmente un producto por ID",
@@ -52,7 +53,8 @@ public interface ProductoApiDoc {
           content = @Content(mediaType = "application/json", schema = @Schema(implementation = Producto.class))
       )
   )
-  ResponseEntity<Producto> actualizaProdId(Long id, ProductUpdateRequestDTO requestDTO);
+  public ResponseEntity<Producto> actualizaProdId(@PathVariable Long id,
+      @RequestBody ProductUpdateRequestDTO requestDTO);
 
   @Operation(
       summary = "Actualiza parcialmente un producto por nombre",
@@ -63,7 +65,8 @@ public interface ProductoApiDoc {
           content = @Content(mediaType = "application/json", schema = @Schema(implementation = Producto.class))
       )
   )
-  ResponseEntity<Producto> actualizaPorNombre(String nombre, ProductUpdateRequestDTO requestDTO);
+  public ResponseEntity<Producto> actualizaPorNombre(@PathVariable String nombre,
+      @RequestBody ProductUpdateRequestDTO requestDTO);
 
   @Operation(
       summary = "Elimina un producto por ID",
