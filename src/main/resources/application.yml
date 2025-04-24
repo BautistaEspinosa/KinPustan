@@ -20,7 +20,25 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+# Configuración SpringDoc OpenAPI (Swagger)
 springdoc:
+  api-docs:
+    path: /v3/api-docs  # Endpoint para el JSON de la API
+    enabled: true
   swagger-ui:
-    path: /api-docs
+    path: /swagger-ui.html  # Interfaz gráfica
+    enabled: true
     tags-sorter: alpha
+    operations-sorter: alpha
+  show-actuator: true
+  cache:
+    disabled: true  # Desactiva cache en desarrollo
+
+# Configuración de logging para diagnóstico
+logging:
+  level:
+    org.springdoc: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
