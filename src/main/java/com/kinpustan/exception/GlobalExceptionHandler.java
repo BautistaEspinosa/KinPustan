@@ -16,4 +16,12 @@ public class GlobalExceptionHandler {
   public ResponseEntity<String> handleProductNotFound(ProductoNoEncontradoException e){
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
   }
+  @ExceptionHandler(CategoriaNoEncontradaException.class)
+  public ResponseEntity<String> handleCategoriaNotFound(CategoriaNoEncontradaException e){
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+  }
+  @ExceptionHandler(CategoriaExistenteException.class)
+  public ResponseEntity<String> handleCategoriaExist(CategoriaExistenteException e){
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+  }
 }

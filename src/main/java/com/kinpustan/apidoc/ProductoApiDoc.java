@@ -2,11 +2,13 @@ package com.kinpustan.apidoc;
 
 import com.kinpustan.model.Producto;
 import com.kinpustan.model.dto.ProductUpdateRequestDTO;
+import com.kinpustan.model.dto.ProductoResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.springframework.data.domain.Page;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +24,7 @@ public interface ProductoApiDoc {
           content = @Content(mediaType = "application/json", schema = @Schema(implementation = Producto.class))
       )
   )
-  ResponseEntity<Page<Producto>> getAll(@RequestParam int page, @RequestParam int size);
+  ResponseEntity<List<Producto>> getAll(@RequestParam int page, @RequestParam int size);
 
   @Operation(
       summary = "Busca un producto por ID",
@@ -32,7 +34,7 @@ public interface ProductoApiDoc {
           @ApiResponse(responseCode = "404", description = "Producto no encontrado")
       }
   )
-  Producto findByID(@PathVariable Long id);
+  ProductoResponseDTO findByID(@PathVariable Long id);
 
   @Operation(
       summary = "Crea un nuevo producto",
@@ -42,7 +44,7 @@ public interface ProductoApiDoc {
           content = @Content(mediaType = "application/json", schema = @Schema(implementation = Producto.class))
       )
   )
-  ResponseEntity<Producto> create(@RequestBody Producto producto);
+  ResponseEntity<ProductoResponseDTO> create(@RequestBody Producto producto);
 
   @Operation(
       summary = "Actualiza parcialmente un producto por ID",
@@ -76,4 +78,10 @@ public interface ProductoApiDoc {
       )
   )
   void DeleteProds(@PathVariable Long id);
+  @Operation(summary = "Obtener productos por categoría")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Productos encontrados"),
+      @ApiResponse(responseCode = "404", description = "Categoría no encontrada")
+  })
+  ResponseEntity<List<Producto>> getByCategoria(@PathVariable Long categoriaId);
 }

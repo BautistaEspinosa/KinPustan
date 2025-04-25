@@ -2,7 +2,6 @@ package com.kinpustan.service;
 
 import com.kinpustan.model.Producto;
 import com.kinpustan.model.dto.ProductUpdateRequestDTO;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
