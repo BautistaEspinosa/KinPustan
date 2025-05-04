@@ -24,4 +24,10 @@ public class GlobalExceptionHandler {
   public ResponseEntity<String> handleCategoriaExist(CategoriaExistenteException e){
     return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
   }
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<String> handleAllExceptions(Exception ex) {
+    ex.printStackTrace(); // O usa Logger
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body("Error interno del servidor: " + ex.getMessage());
+  }
 }

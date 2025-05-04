@@ -1,5 +1,6 @@
 package com.kinpustan.controller;
 
+import com.kinpustan.apidoc.CategoriaApiDoc;
 import com.kinpustan.model.Categoria;
 import com.kinpustan.model.dto.CategoryUpdateRequestDTO;
 import com.kinpustan.service.CategoryService;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/catalogs")
-public class CategoriaController {
+public class CategoriaController implements CategoriaApiDoc {
 
   private CategoryService categoryService;
 

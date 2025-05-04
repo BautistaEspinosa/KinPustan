@@ -42,3 +42,7 @@ logging:
     org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+jwt:
+  secret: bM2N5r8uF92Aj3wBkLR7Zx8Tq1HvL6mXnT8gKp3AeKw=
+  expiration: 86400000

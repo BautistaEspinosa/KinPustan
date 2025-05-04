@@ -10,9 +10,11 @@ import com.kinpustan.service.CategoryService;
 import com.kinpustan.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,37 +32,49 @@ public class ProductoController implements ProductoApiDoc {
 
   private ProductService productService;
   private CategoryService categoryService;
+  @Autowired
   private ProductRepository productRepository;
 
-  public ProductoController(ProductService productService,CategoryService categoryService) {
+  public ProductoController(ProductService productService, CategoryService categoryService) {
     this.productService = productService;
     this.categoryService = categoryService;
   }
 
+  
   @GetMapping
   public ResponseEntity<List<Producto>> getAll(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size) {
-    Pageable pageable = PageRequest.of(page,size);
+    Pageable pageable = PageRequest.of(page, size);
     List<Producto> prods = productService.getAllProds(pageable).getContent();
     return ResponseEntity.status(HttpStatus.OK).body(prods);
   }
+
   @GetMapping("/{id}")
   public ProductoResponseDTO findByID(@PathVariable Long id) {
     Producto producto = productService.getById(id);
     return new ProductoResponseDTO(producto);
   }
 
-@PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ProductoResponseDTO> create(@RequestBody @Valid Producto producto) {
-     Producto producto1 = productService.saveProd(producto);
-    return ResponseEntity.status(HttpStatus.CREATED).body(new ProductoResponseDTO(producto1));
+    System.out.println("Producto recibido: " + producto);
+
+    Producto producto1 = productService.saveProd(producto);
+    System.out.println("Producto guardado: " + producto1);
+
+    ProductoResponseDTO dto = new ProductoResponseDTO(producto1);
+    System.out.println("DTO creado: " + dto);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(dto);
   }
+
   @GetMapping("/categoria/{categoriaId}")
   public ResponseEntity<List<Producto>> getByCategoria(@PathVariable Long categoriaId) {
     List<Producto> productos = productRepository.findByCategoriaId(categoriaId);
     return ResponseEntity.ok(productos);
   }
+
   @PatchMapping("/id/{id}")
   public ResponseEntity<Producto> actualizaProdId(@PathVariable Long id,
       @RequestBody ProductUpdateRequestDTO requestDTO) {

@@ -43,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
 
   @Override
   public Categoria saveCatego(Categoria categoria) {
-    logger.info("Intentando guardar categoria: {}", categoria);
+    logger.info("Intentando guardar categoria: {}", categoria.getNombre());
     Optional<Categoria> existCatego = categoryRepository.findByNombreIgnoreCase(
         categoria.getNombre());
     if (existCatego.isPresent()) {
@@ -51,7 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
       throw new CategoriaExistenteException("La categoría ya existe");
     }
     Categoria categoriaSaved = categoryRepository.save(categoria);
-    logger.info("La categoría {} se guardó exitosamente", categoriaSaved);
+    logger.info("La categoría {} se guardó exitosamente", categoria.getNombre());
     return categoriaSaved;
   }
 

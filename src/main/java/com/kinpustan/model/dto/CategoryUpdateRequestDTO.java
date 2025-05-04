@@ -1,21 +1,29 @@
 package com.kinpustan.model.dto;
 
 import com.kinpustan.model.Categoria;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+@NoArgsConstructor
+@Schema(description = "DTO para actualizar una categoría")
 public class CategoryUpdateRequestDTO {
 
-  @NotBlank(message = "El nombre no puede estar vacío")
-  private String nombre;
   private Long id;
+
+  @Schema(description = "nuevo nombre de la categoría",
+      example = "Bebidas")
+  private String nombre;
+
   public CategoryUpdateRequestDTO(Categoria categoria) {
     this.id = categoria.getId();
     this.nombre = categoria.getNombre();
   }
+
   public String getNombre() {
     return nombre;
   }
