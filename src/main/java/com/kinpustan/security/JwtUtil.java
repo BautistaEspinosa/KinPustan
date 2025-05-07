@@ -4,48 +4,78 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
 
-@Value("${jwt.secret}")
+  private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
+
+  @Value("${jwt.secret}")
   private String secret;
-@Value("${jwt.expiration}")
+
+  @Value("${jwt.expiration}")
   private long expirationMs;
 
-private Key getSigningkey(){
-  return Keys.hmacShaKeyFor(secret.getBytes());
-}
-public String generarToken(String correo){
-  return Jwts.builder()
-      .setSubject(correo)
-      .setIssuedAt(new Date())
-      .setExpiration(new Date(System.currentTimeMillis()+expirationMs))
-      .signWith(getSigningkey(), SignatureAlgorithm.HS256)
-      .compact();
-}
-public String extraerCorreo(String token){
-  return Jwts.parserBuilder()
-      .setSigningKey(getSigningkey())
-      .build()
-      .parseClaimsJwt(token)
-      .getBody()
-      .getSubject();
-}
-
-public boolean validarToken(String token){
-  try{
-    Jwts.parserBuilder()
-        .setSigningKey(getSigningkey())
-        .build()
-        .parseClaimsJwt(token);
-    return true;
-  }catch (JwtException e){
-    return false;
+  private Key getSigningkey() {
+    logger.debug("Generando clave de firma JWT");
+    return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
   }
-}
+
+  public String generarToken(String correo) {
+    logger.info("Generando token para el correo: {}", correo);
+    try {
+      String token = Jwts.builder()
+          .setSubject(correo)
+          .setIssuedAt(new Date())
+          .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+          .signWith(getSigningkey(), SignatureAlgorithm.HS256)
+          .compact();
+      logger.debug("Token generado exitosamente");
+      return token;
+    } catch (Exception e) {
+      logger.error("Error al generar el token: {}", e.getMessage(), e);
+      throw e;
+    }
+  }
+
+  public String extraerCorreo(String token) {
+    logger.info("Extrayendo correo del token");
+    try {
+      String correo = Jwts.parserBuilder()
+          .setSigningKey(getSigningkey())
+          .build()
+          .parseClaimsJws(token)
+          .getBody()
+          .getSubject();
+      logger.debug("Correo extraído del token: {}", correo);
+      return correo;
+    } catch (JwtException e) {
+      logger.warn("Error al extraer el correo del token: {}", e.getMessage());
+      throw e;
+    }
+  }
+
+  public boolean validarToken(String token) {
+    logger.info("Validando token");
+    try {
+      Jwts.parserBuilder()
+          .setSigningKey(getSigningkey())
+          .build()
+          .parseClaimsJws(token);
+      logger.debug("Token válido");
+      return true;
+    } catch (JwtException e) {
+      logger.warn("Token inválido: {}", e.getMessage());
+      return false;
+    }
+  }
 }

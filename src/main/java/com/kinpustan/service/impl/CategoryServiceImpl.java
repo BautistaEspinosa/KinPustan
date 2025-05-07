@@ -56,7 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   @Override
-  public void DeleteCategory(Long id) {
+  public void deleteCategory(Long id) {
     logger.info("Elimando categoria con el id: {}", id);
     categoryRepository.deleteById(id);
     logger.info("Categoría elimanda existosamente");

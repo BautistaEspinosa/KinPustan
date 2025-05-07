@@ -77,7 +77,7 @@ public interface ProductoApiDoc {
           description = "Producto eliminado exitosamente"
       )
   )
-  void DeleteProds(@PathVariable Long id);
+  void deleteProds(@PathVariable Long id);
   @Operation(summary = "Obtener productos por categoría")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Productos encontrados"),

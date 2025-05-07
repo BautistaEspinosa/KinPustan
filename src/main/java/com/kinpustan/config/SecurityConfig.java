@@ -30,13 +30,21 @@ public class SecurityConfig {
                 "/swagger-ui.html",
                 "/h2-console/**"
             ).permitAll()
-            .requestMatchers(
-                HttpMethod.GET,"/api/products/**,/api/catalogs/**"
-            ).hasAnyRole("USER","ADMIN")
+
+            // ADMIN puede crear, actualizar y borrar productos y categorías
+            .requestMatchers(HttpMethod.POST, "/api/products", "/api/catalogs").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PATCH, "/api/products/**", "/api/catalogs/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/api/products/**", "/api/catalogs/**").hasRole("ADMIN")
+
+            // USER puede ver productos y categorías
+            .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/catalogs/**").hasAnyRole("USER", "ADMIN")
+
+            // Cualquier otra petición necesita autenticación
             .anyRequest().authenticated()
         )
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
         .headers(headers -> headers.frameOptions(frame -> frame.disable())); // Para H2
     return http.build();
   }
+
 }

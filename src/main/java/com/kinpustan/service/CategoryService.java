@@ -9,7 +9,7 @@ public interface CategoryService {
   Page<Categoria> getAllCategory(Pageable pageable);
   Categoria getById(Long id);
   Categoria saveCatego(Categoria categoria);
-  void DeleteCategory(Long id);
+  void deleteCategory(Long id);
   Categoria updateById(Long id, CategoryUpdateRequestDTO requestDTO);
   Categoria updateByName(String nombre,CategoryUpdateRequestDTO requestDTO);
 }

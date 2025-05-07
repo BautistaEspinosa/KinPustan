@@ -1,9 +1,11 @@
 package com.kinpustan.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
 
 @Schema(description = "DTO para actualizar un producto")
+@Data
 public class ProductUpdateRequestDTO {
 
   @Schema(description = "nuevo nombre del producto",
@@ -23,42 +25,4 @@ public class ProductUpdateRequestDTO {
   example = "bebidas")
   private Long categoriaId;
 
-  public Long getCategoriaId() {
-    return categoriaId;
-  }
-
-  public void setCategoriaId(Long categoriaId) {
-    this.categoriaId = categoriaId;
-  }
-  public String getNombre() {
-    return nombre;
-  }
-
-  public void setNombre(String nombre) {
-    this.nombre = nombre;
-  }
-
-  public String getDescripcion() {
-    return descripcion;
-  }
-
-  public void setDescripcion(String descripcion) {
-    this.descripcion = descripcion;
-  }
-
-  public Double getPrecio() {
-    return precio;
-  }
-
-  public void setPrecio(Double precio) {
-    this.precio = precio;
-  }
-
-  public Integer getStock() {
-    return stock;
-  }
-
-  public void setStock(Integer stock) {
-    this.stock = stock;
-  }
 }

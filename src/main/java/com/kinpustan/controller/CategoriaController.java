@@ -62,7 +62,7 @@ public class CategoriaController implements CategoriaApiDoc {
     return ResponseEntity.status(HttpStatus.OK).body(categoriaActual);
   }
   @DeleteMapping("/{id}")
-  public void DeleteCategory(@PathVariable Long id){
-    categoryService.DeleteCategory(id);
+  public void deleteCategory(@PathVariable Long id){
+    categoryService.deleteCategory(id);
   }
 }

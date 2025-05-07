@@ -107,7 +107,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public void DeleteProd(Long id) {
+  public void deleteProd(Long id) {
     logger.info("Eliminando producto por id: {}", id);
     if (!productRepository.existsById(id)) {
       logger.warn("Intento de eliminar producto inexistente con id: {}", id);

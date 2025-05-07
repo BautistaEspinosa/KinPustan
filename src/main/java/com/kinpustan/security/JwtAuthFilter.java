@@ -6,6 +6,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import java.io.IOException;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
+
+  private static final Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
 
   private final JwtUtil jwtUtil;
   private final UsuarioRepository usuarioRepository;
@@ -32,9 +36,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     if (authHeader != null && authHeader.startsWith("Bearer ")) {
       String token = authHeader.substring(7);
+      logger.debug("Token extraído del header: {}", token);
 
       if (jwtUtil.validarToken(token)) {
+        logger.info("Token válido. Procesando autenticación.");
+
         String correo = jwtUtil.extraerCorreo(token);
+        logger.debug("Correo extraído del token: {}", correo);
+
         Usuario usuario = usuarioRepository.findByCorreo(correo).orElse(null);
 
         if (usuario != null) {
@@ -46,8 +55,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
               new UsernamePasswordAuthenticationToken(correo, null, authorities);
 
           SecurityContextHolder.getContext().setAuthentication(auth);
+          logger.info("Usuario autenticado: {} con roles: {}", correo,
+              authorities.stream().map(Object::toString).collect(Collectors.joining(", ")));
+        } else {
+          logger.warn("No se encontró el usuario con correo: {}", correo);
         }
+      } else {
+        logger.warn("Token inválido recibido.");
       }
+    } else {
+      logger.debug("No se encontró el header Authorization o no comienza con 'Bearer '");
     }
 
     filterChain.doFilter(request, response);

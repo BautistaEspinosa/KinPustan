@@ -9,7 +9,7 @@ public interface ProductService {
   Page<Producto> getAllProds(Pageable pageable);
   Producto getById(Long id);
   Producto saveProd(Producto producto);
-  void DeleteProd(Long id);
+  void deleteProd(Long id);
   Producto updatebyId(Long id, ProductUpdateRequestDTO requestDTO);
   Producto updatebyName(String nombre,ProductUpdateRequestDTO requestDTO);
 }

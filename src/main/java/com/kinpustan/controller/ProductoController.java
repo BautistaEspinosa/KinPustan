@@ -31,13 +31,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductoController implements ProductoApiDoc {
 
   private ProductService productService;
-  private CategoryService categoryService;
+
   @Autowired
   private ProductRepository productRepository;
 
-  public ProductoController(ProductService productService, CategoryService categoryService) {
+  public ProductoController(ProductService productService) {
     this.productService = productService;
-    this.categoryService = categoryService;
   }
 
   
@@ -90,8 +89,8 @@ public class ProductoController implements ProductoApiDoc {
   }
 
   @DeleteMapping("/{id}")
-  public void DeleteProds(@PathVariable Long id) {
-    productService.DeleteProd(id);
+  public void deleteProds(@PathVariable Long id) {
+    productService.deleteProd(id);
   }
 
 }

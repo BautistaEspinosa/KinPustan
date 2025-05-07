@@ -79,5 +79,5 @@ public interface CategoriaApiDoc {
           description = "Categoría eliminada exitosamente"
       )
   )
-  public void DeleteCategory(@PathVariable Long id);
+  public void deleteCategory(@PathVariable Long id);
 }
