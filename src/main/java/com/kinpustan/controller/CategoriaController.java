@@ -43,6 +43,7 @@ public class CategoriaController implements CategoriaApiDoc {
   public Categoria encuentraById(@PathVariable Long id) {
     return categoryService.getById(id);
   }
+
   @PostMapping
   public ResponseEntity<Categoria> create(@RequestBody @Valid Categoria categoria){
     Categoria categoria1 = categoryService.saveCatego(categoria);
