@@ -1,24 +1,27 @@
 package com.kinpustan.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.PrePersist;
+import java.time.Instant;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-public class Categoria {
+public class CartSession {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(nullable = false, unique = true)
-  private String nombre;
+
+  private Instant createdAt;
+  private Instant updatedAt;
+
+  @PrePersist
+  public void prePersist(){
+    createdAt = Instant.now();
+    updatedAt = Instant.now();
+  }
 }

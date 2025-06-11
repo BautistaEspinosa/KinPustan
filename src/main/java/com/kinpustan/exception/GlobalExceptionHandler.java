@@ -30,4 +30,9 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body("Error interno del servidor: " + ex.getMessage());
   }
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<String> handleCarritoNotFoundExceptions(Exception e){
+   return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        .body("NOT FOUND: "+e.getMessage());
+  }
 }

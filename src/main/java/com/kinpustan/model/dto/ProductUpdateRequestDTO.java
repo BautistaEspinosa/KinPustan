@@ -20,7 +20,6 @@ public class ProductUpdateRequestDTO {
   @Schema(description = "Especificación de stock",
       example = "100")
   private Integer stock;
-
   @Schema(description = "Especificación de la categoria peretenciente",
   example = "bebidas")
   private Long categoriaId;
