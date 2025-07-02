@@ -1,10 +1,13 @@
 package com.kinpustan.config;
 
+import com.kinpustan.security.JwtAuthEntryPoint;
 import com.kinpustan.security.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,15 +22,18 @@ public class SecurityConfig {
   }
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter,
+      JwtAuthEntryPoint jwtAuthEntryPoint) throws Exception {
     http
-        .csrf(csrf -> csrf.disable())
+        .csrf(AbstractHttpConfigurer::disable)
+        .exceptionHandling(eh->eh.authenticationEntryPoint(jwtAuthEntryPoint))
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(
                 "/auth/**",
                 "/v3/api-docs/**",
                 "/swagger-ui/**",
                 "/swagger-ui.html",
+                "/webjars/**",
                 "/h2-console/**"
             ).permitAll()
 
@@ -35,7 +41,7 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.POST, "/api/products", "/api/catalogs").hasRole("ADMIN")
             .requestMatchers(HttpMethod.PATCH, "/api/products/**", "/api/catalogs/**").hasRole("ADMIN")
             .requestMatchers(HttpMethod.DELETE, "/api/products/**", "/api/catalogs/**").hasRole("ADMIN")
-            .requestMatchers(HttpMethod.POST,"api/cart/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.POST,"/api/cart/**").hasRole("ADMIN")
             // USER puede ver productos y categorías
             .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/catalogs/**").hasAnyRole("USER", "ADMIN")
 
@@ -43,7 +49,7 @@ public class SecurityConfig {
             .anyRequest().authenticated()
         )
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-        .headers(headers -> headers.frameOptions(frame -> frame.disable())); // Para H2
+        .headers(headers -> headers.frameOptions(FrameOptionsConfig::disable)); // Para H2
     return http.build();
   }
 

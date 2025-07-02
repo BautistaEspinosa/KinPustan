@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -20,7 +21,7 @@ public interface LoginApiDoc {
           content = @Content(mediaType = "application/json", schema = @Schema(implementation = Producto.class))
       )
   )
-  ResponseEntity<String> registrar(@RequestBody RegisterUserRequestDTO dto);
+  ResponseEntity<Map<String,String>> registrar(@RequestBody RegisterUserRequestDTO dto);
 
   @Operation(
       summary = "Login de usuario",
@@ -30,5 +31,5 @@ public interface LoginApiDoc {
           content = @Content(mediaType = "application/json", schema = @Schema(implementation = Producto.class))
       )
   )
-  ResponseEntity<String> login(@RequestBody LoginRequestDTO dto);
+  ResponseEntity<Map<String,String>> login(@RequestBody LoginRequestDTO dto);
 }

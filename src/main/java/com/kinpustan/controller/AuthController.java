@@ -5,6 +5,8 @@ import com.kinpustan.model.dto.LoginRequestDTO;
 import com.kinpustan.model.dto.RegisterUserRequestDTO;
 import com.kinpustan.service.LoginService;
 import jakarta.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,14 +25,27 @@ public class AuthController implements LoginApiDoc {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<String> registrar(@Valid @RequestBody RegisterUserRequestDTO dto){
-    String response = loginService.registrar(dto);
-    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+  public ResponseEntity<Map<String,String>> registrar(@Valid @RequestBody RegisterUserRequestDTO dto){
+    Map<String,String> response = loginService.registrar(dto);
+    String mensaje = response.get("message");
+    HttpStatus status = mensaje.equalsIgnoreCase("El correo ya existe") ?
+        HttpStatus.CONFLICT : HttpStatus.CREATED;
+
+    return ResponseEntity.status(status).body(response);
   }
 
   @PostMapping("/login")
-  public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDTO dto){
-    String response = loginService.login(dto);
-    return ResponseEntity.status(HttpStatus.OK).body(response);
+  public ResponseEntity<Map<String, String>> login(@Valid @RequestBody LoginRequestDTO dto) {
+    String resultado = loginService.login(dto);
+    Map<String, String> response = new HashMap<>();
+
+    if ("Usuario no existe".equals(resultado) || "Contraseña incorrecta".equals(resultado)) {
+      response.put("error", resultado);
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    response.put("token", resultado);
+    return ResponseEntity.ok(response);
   }
+
 }

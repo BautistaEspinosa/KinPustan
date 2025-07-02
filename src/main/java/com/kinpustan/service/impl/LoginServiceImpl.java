@@ -10,6 +10,7 @@ import com.kinpustan.security.JwtUtil;
 import com.kinpustan.service.LoginService;
 import jakarta.transaction.Transactional;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.slf4j.Logger;
@@ -37,12 +38,12 @@ public class LoginServiceImpl implements LoginService {
 
   @Override
   @Transactional
-  public String registrar(RegisterUserRequestDTO dto) {
+  public Map<String,String> registrar(RegisterUserRequestDTO dto) {
     logger.info("Intentando registrar usuario con correo: {}", dto.getCorreo());
 
     if (usuarioRepository.existsByCorreo(dto.getCorreo())) {
       logger.warn("Intento de registro fallido: el correo {} ya existe", dto.getCorreo());
-      return "El correo ya existe";
+      return Map.of("message","El correo ya existe");
     }
 
     Set<Rol> rolSet = new HashSet<>();
@@ -63,7 +64,7 @@ public class LoginServiceImpl implements LoginService {
 
     usuarioRepository.save(user);
     logger.info("Usuario registrado exitosamente con correo: {}", dto.getCorreo());
-    return "Usuario registrado exitosamente.";
+    return Map.of("message", "Usuario registrado exitosamente.");
   }
 
   @Override
@@ -85,7 +86,7 @@ public class LoginServiceImpl implements LoginService {
       return "Contraseña incorrecta";
     }
 
-    String token = jwtUtil.generarToken(user.getCorreo());
+    String token = jwtUtil.generarToken(user);
     logger.info("Login exitoso para el usuario {}. Token generado.", requestDTO.getCorreo());
     return token;
   }

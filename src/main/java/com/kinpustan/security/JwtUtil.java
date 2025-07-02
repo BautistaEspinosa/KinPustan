@@ -1,14 +1,15 @@
 package com.kinpustan.security;
 
+import com.kinpustan.model.Rol;
+import com.kinpustan.model.Usuario;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,11 +31,15 @@ public class JwtUtil {
     return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
   }
 
-  public String generarToken(String correo) {
-    logger.info("Generando token para el correo: {}", correo);
+  public String generarToken(Usuario user) {
+    logger.info("Generando token para el usuario {} con correo {}", user.getNombre(),user.getCorreo());
+
+    var roles = user.getRoles().stream().map(Rol::getNombre).toList();
+
     try {
       String token = Jwts.builder()
-          .setSubject(correo)
+          .setSubject(user.getCorreo())
+          .claim("roles", roles)
           .setIssuedAt(new Date())
           .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
           .signWith(getSigningkey(), SignatureAlgorithm.HS256)
@@ -77,5 +82,12 @@ public class JwtUtil {
       logger.warn("Token inválido: {}", e.getMessage());
       return false;
     }
+  }
+  public Claims extraerClaims(String token) {
+    return Jwts.parserBuilder()
+        .setSigningKey(getSigningkey())
+        .build()
+        .parseClaimsJws(token)
+        .getBody();
   }
 }

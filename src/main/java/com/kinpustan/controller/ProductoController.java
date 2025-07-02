@@ -39,7 +39,7 @@ public class ProductoController implements ProductoApiDoc {
     this.productService = productService;
   }
 
-  
+  //Obtiene todos los productos existentes en stock
   @GetMapping
   public ResponseEntity<List<Producto>> getAll(
       @RequestParam(defaultValue = "0") int page,
@@ -49,12 +49,14 @@ public class ProductoController implements ProductoApiDoc {
     return ResponseEntity.status(HttpStatus.OK).body(prods);
   }
 
+  //busca un producto por id
   @GetMapping("/{id}")
   public ProductoResponseDTO findByID(@PathVariable Long id) {
     Producto producto = productService.getById(id);
     return new ProductoResponseDTO(producto);
   }
 
+  //CREA UN NUEVO PRODUCTO
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ProductoResponseDTO> create(@RequestBody @Valid Producto producto) {
     System.out.println("Producto recibido: " + producto);
@@ -67,6 +69,7 @@ public class ProductoController implements ProductoApiDoc {
 
     return ResponseEntity.status(HttpStatus.CREATED).body(dto);
   }
+
 
   @GetMapping("/categoria/{categoriaId}")
   public ResponseEntity<List<Producto>> getByCategoria(@PathVariable Long categoriaId) {
@@ -93,4 +96,12 @@ public class ProductoController implements ProductoApiDoc {
     productService.deleteProd(id);
   }
 
+  @GetMapping("/low-stock")
+  public ResponseEntity<List<ProductoResponseDTO>> getLowStockProducts(){
+    List<Producto> lowProducts = productRepository.findByStockLessThanEqual(5);
+    List<ProductoResponseDTO> dtos = lowProducts.stream()
+        .map(ProductoResponseDTO::new)
+        .toList();
+    return ResponseEntity.ok(dtos);
+  }
 }

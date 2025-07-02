@@ -2,9 +2,12 @@ package com.kinpustan.security;
 
 import com.kinpustan.model.Usuario;
 import com.kinpustan.repository.UsuarioRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,51 +25,50 @@ public class JwtAuthFilter extends OncePerRequestFilter {
   private static final Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
 
   private final JwtUtil jwtUtil;
-  private final UsuarioRepository usuarioRepository;
 
-  public JwtAuthFilter(JwtUtil jwtUtil, UsuarioRepository usuarioRepository) {
+  public JwtAuthFilter(JwtUtil jwtUtil) {
     this.jwtUtil = jwtUtil;
-    this.usuarioRepository = usuarioRepository;
   }
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
+    logger.debug("Entrando al metodo doFilterInternal");
+
     String authHeader = request.getHeader("Authorization");
 
     if (authHeader != null && authHeader.startsWith("Bearer ")) {
+
       String token = authHeader.substring(7);
       logger.debug("Token extraído del header: {}", token);
 
       if (jwtUtil.validarToken(token)) {
         logger.info("Token válido. Procesando autenticación.");
 
-        String correo = jwtUtil.extraerCorreo(token);
-        logger.debug("Correo extraído del token: {}", correo);
+        // Extraer claims directamente del token
+        Claims claims = jwtUtil.extraerClaims(token);
+        String correo = claims.getSubject();
 
-        Usuario usuario = usuarioRepository.findByCorreo(correo).orElse(null);
+        List<String> roles = claims.get("roles", List.class);
+        logger.debug("Roles extraídos del token: {}", roles);
 
-        if (usuario != null) {
-          var authorities = usuario.getRoles().stream()
-              .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.getNombre()))
-              .collect(Collectors.toList());
+        var authorities = roles.stream()
+            .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+            .collect(Collectors.toList());
 
-          UsernamePasswordAuthenticationToken auth =
-              new UsernamePasswordAuthenticationToken(correo, null, authorities);
+        UsernamePasswordAuthenticationToken auth =
+            new UsernamePasswordAuthenticationToken(correo, null, authorities);
 
-          SecurityContextHolder.getContext().setAuthentication(auth);
-          logger.info("Usuario autenticado: {} con roles: {}", correo,
-              authorities.stream().map(Object::toString).collect(Collectors.joining(", ")));
-        } else {
-          logger.warn("No se encontró el usuario con correo: {}", correo);
-        }
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        logger.info("Usuario autenticado: {} con roles: {}", correo, authorities);
       } else {
         logger.warn("Token inválido recibido.");
       }
-    } else {
-      logger.debug("No se encontró el header Authorization o no comienza con 'Bearer '");
     }
 
     filterChain.doFilter(request, response);
   }
+
+
+
 }
