@@ -11,14 +11,13 @@ const data = [
 export default function SalesChart() {
   return (
     <div className="bg-white p-4 shadow rounded">
-      <h2 className="text-lg font-semibold mb-4">Ventas por día</h2>
-      <ResponsiveContainer width="100%" height={250}>
+      <ResponsiveContainer width="90%" height={300}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="fecha" />
           <YAxis allowDecimals={false} />
           <Tooltip />
-          <Bar dataKey="ventas" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="ventas" fill="#3B82F6" radius={[3, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

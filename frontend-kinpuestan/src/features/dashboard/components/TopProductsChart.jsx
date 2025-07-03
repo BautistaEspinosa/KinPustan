@@ -13,8 +13,7 @@ const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 export default function TopProductsChart(){
 return (
   <div className="bg-white p-4 shadow rounded">
-       <h2 className="text-lg font-semibold mb-4">Productos más vendidos</h2>
-       <ResponsiveContainer width="100%" height={250}>
+       <ResponsiveContainer width="80%" height={270}>
          <PieChart>
            <Pie
            data = {data}
@@ -22,7 +21,7 @@ return (
            nameKey = "nombre"
            cx="50%"
            cy = "50%"
-           outerRadius = {100}
+           outerRadius = {90}
            label
            >
            {data.map((entry, index) => (

@@ -10,7 +10,6 @@ const recentlyActivity = [
 export default function RecentActivity(){
   return(
     <div className="bg-white p-4 shadow rounded">
-          <h2 className="text-lg font-semibold mb-4">Actividad Reciente</h2>
           <ul className="divide-y divide-gray-200">
             {recentlyActivity.map(({ id, description, date }) => (
               <li key={id} className="py-2 text-sm">

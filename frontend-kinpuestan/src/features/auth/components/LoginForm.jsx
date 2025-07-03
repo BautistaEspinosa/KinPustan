@@ -21,8 +21,9 @@ const handleClickRegister = () =>{
   navigate('/register');
   };
 return(
+  <div className="login-container">
   <form onSubmit={handleSubmit}
-  className="flex flex-col gap-5 p-6 bg-yellow-50 rounded-2xl shadow-lg w-full max-w-md mx-auto" >
+  className="login-form" >
   <div className="text-center">
 <img src="/logo.png" alt="Logo KinPustan" />
           <h2 className="text-xl font-bold text-yellow-800">Bienvenido a KinPustan</h2>
@@ -55,5 +56,7 @@ return(
         <button type="button"
             className="text-yellow-700 underline hover:text-yellow-900 text-sm text-center"
               onClick={handleClickRegister}>Registrase</button>
-    </form>);
+    </form>
+    </div>
+    );
     }

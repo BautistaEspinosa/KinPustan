@@ -16,7 +16,7 @@ export default function LowStockAlerts() {
 
   return (
     <div className="bg-white p-4 shadow rounded">
-      <h2 className="text-lg font-semibold mb-4">Productos con bajo stock</h2>
+
 
       {error && (
         <p className="text-red-500 font-semibold mb-2">
