@@ -101,6 +101,6 @@ Las contribuciones y sugerencias son bienvenidas.
 Para colaborar, abre un issue o envía un pull request.
 
 ## 📞 Contacto
-Roman Bautisat Espinosa [bautistaespinosaroman@gmail.com]
-GitHub: [BautistaEspinosa](https://github.com/BautistaEspinosa)
-LinkedIn: [Roman Bautista](https://www.linkedin.com/in/roman-bautista-espinosa-b04304170/)
+- Roman Bautisat Espinosa [bautistaespinosaroman@gmail.com]
+- GitHub: [BautistaEspinosa](https://github.com/BautistaEspinosa)
+- LinkedIn: [Roman Bautista](https://www.linkedin.com/in/roman-bautista-espinosa-b04304170/)
