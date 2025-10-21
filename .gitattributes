@@ -1,0 +1,36 @@
+# Archivos de texto: usar siempre LF en el repositorio
+* text=auto eol=lf
+
+# Archivos Java y relacionados
+*.java     text eol=lf
+*.xml      text eol=lf
+*.yml      text eol=lf
+*.yaml     text eol=lf
+*.properties text eol=lf
+*.gradle   text eol=lf
+*.md       text eol=lf
+*.txt      text eol=lf
+
+# Archivos de script
+*.sh       text eol=lf
+*.bat      text eol=crlf
+*.cmd      text eol=crlf
+
+# Archivos JSON y similares
+*.json     text eol=lf
+
+# Archivos de configuración de Git/Maven
+.gitattributes text eol=lf
+.gitignore     text eol=lf
+*.mvn/*        text eol=lf
+
+# Archivos binarios (sin conversión de fin de línea)
+*.jar      binary
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.gif      binary
+*.ico      binary
+*.pdf      binary
+*.zip      binary
+*.exe      binary
